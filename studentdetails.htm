@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+    <style>
+        #studentDetails {
+            margin-top: 20px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        #studentDetails h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .details-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .details-form label {
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        .input-field {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .btn {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .btn:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <form id="studentDetails" method="post" action="stubackend.php">
+        <h2>Student Details</h2>
+        <div class="details-form">
+            <label for="date-picker">Select Contest Date:</label>
+            <input type="date" id="date-picker" name="date-picker" class="input-field">
+            <button type="submit"  class="btn">Get Participants</button>
+        </div>
+    </form>
+    <div class="link">
+        <a href="sample.html">Go to Sample Page</a>
+    </div>
+</body>
+</html>

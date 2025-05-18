@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        form {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            width: 350px;
+        }
+        input, button {
+            margin-bottom: 15px;
+            padding: 15px;
+            font-size: 1em;
+        }
+        #studentDetails {
+            margin-top: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-height: 70vh;
+            overflow-y: auto;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Faculty Login</h1>
+    <form id="loginForm">
+        <input type="text" id="name" placeholder="Faculty Name" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+    </form>
+
+    <div id="studentDetails">
+        <h2>Student Details</h2>
+        <label for="date-picker">Select Contest Date:</label>
+        <input type="text" id="date-picker" name="date-picker">
+        <button onclick="fetchParticipants()">Get Participants</button>
+        <input type="file" id="excelFile" accept=".xlsx, .xls">
+        <input type="text" id="excelLink" placeholder="Paste Excel file link here">
+        <button id="loadLink">Load Excel from Link</button>
+        <table id="studentTable"></table>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#date-picker').datepicker({
+                dateFormat: 'dd-mm-yy' // Set the desired format for the jQuery date picker
+            });
+        });
+
+        const form = document.getElementById('loginForm');
+        const studentDetailsDiv = document.getElementById('studentDetails');
+        const excelFileInput = document.getElementById('excelFile');
+        const studentTable = document.getElementById('studentTable');
+        const excelLinkInput = document.getElementById('excelLink');
+        const loadLinkButton = document.getElementById('loadLink');
+        const resultDiv = document.getElementById('result');
+
+        // Faculty login verification
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+
+            if (name === 'vignan' && password === 'vignan') {
+                studentDetailsDiv.style.display = 'block';
+            } else {
+                alert('Invalid credentials');
+            }
+        });
+
+        // Load and display Excel file data with original date format
+        excelFileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true, dateNF: 'dd-mm-yyyy' });
+                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                const rows = XLSX.utils.sheet_to_json(firstSheet, { header: 1, raw: false });
+
+                studentTable.innerHTML = ''; // Clear previous table content
+                rows.forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    row.forEach((cell) => {
+                        const cellElement = document.createElement(index === 0 ? 'th' : 'td');
+                        cellElement.textContent = cell || '';
+                        tr.appendChild(cellElement);
+                    });
+                    studentTable.appendChild(tr);
+                });
+            };
+            reader.readAsArrayBuffer(file);
+        });
+
+        // Load Excel file from URL link
+        loadLinkButton.addEventListener('click', () => {
+            const link = excelLinkInput.value;
+            if (link) {
+                const iframe = document.createElement('iframe');
+                iframe.src = link;
+                iframe.style.display = 'block';
+                document.body.appendChild(iframe);
+            } else {
+                alert('Please paste a valid Excel link.');
+            }
+        });
+
+        // Fetch contest participants based on the selected date
+        function fetchParticipants() {
+            const date = $('#date-picker').val(); // Get date from jQuery date picker in 'dd-mm-yy' format
+            if (!date) return alert('Please select a date.');
+
+            fetch(`faculty_fetch_participants.php?date=${encodeURIComponent(date)}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultDiv.innerHTML = ''; // Clear previous results
+                    if (data.success) {
+                        resultDiv.innerHTML = `<h3>Participants on ${date}:</h3><ul>${
+                            data.data.map(participant => 
+                                `<li>${participant["Student ID"]} (Problems Solved: ${participant["Problems Solved"]})</li>`
+                            ).join('')}
+                        </ul>`;
+                    } else {
+                        resultDiv.innerHTML = `<h3>${data.message}</h3>`;
+                    }
+                })
+                .catch(error => console.error('Error fetching participants:', error));
+        }
+    </script>
+</body>
+</html>

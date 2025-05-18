@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Contests</title>
+        <style>
+            /* General page styling */
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
+
+            h2 {
+                text-align: center;
+                color: #333;
+                margin-top: 50px;
+            }
+
+            .section {
+                padding: 20px;
+                margin: 0 10%;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .card {
+                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
+                padding: 20px;
+                transition: transform 0.3s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .card-title {
+                font-size: 1.5rem;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            .event-details {
+                font-size: 1rem;
+                color: #777;
+                margin: 5px 0;
+            }
+
+            .btn {
+                padding: 10px 20px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                text-transform: uppercase;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn:hover {
+                background-color: #218838;
+            }
+
+            /* Responsive design */
+            @media (max-width: 768px) {
+                .section {
+                    margin: 0 5%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div id="contests" class="section">
+            <h2>Contests</h2>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">March Challenge</h3>
+                    <p>Date: March 12, 2025</p>
+                    <p class="event-details">Location: Code Horizon Main Seminar Hall</p>
+                    <p class="event-details">Timings: 10:00 AM - 5:00 PM</p>
+                    <button class="btn" onclick="joinContest('MARCH Challenge')">Join Now</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">December Code Fest</h3>
+                    <p>Date: December 15-18, 2024</p>
+                    <p class="event-details">Location: Open Auditorium</p>
+                    <p class="event-details">Timings: 9:00 AM - 6:00 PM</p>
+                    <button class="btn" onclick="joinContest('DECEMBER Code Fest')">Join Now</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            function joinContest(contestName) {
+                alert('You have joined the ' + contestName);
+            }
+        </script>
+    </body>
+</html>
